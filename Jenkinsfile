@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'nginx:latest'
         CONTAINER_NAME = 'my-nginx-container'
+        GITHUB_REPO = 'https://github.com/nihalsingh571/id.git'
     }
     
     stages {
@@ -17,7 +18,7 @@ pipeline {
         stage('Clone Code') {
             steps {
                 // Clone the repository
-                git 'https://github.com/your-repo/your-project.git'
+                git url: "${GITHUB_REPO}", branch: 'main'
             }
         }
         
@@ -55,6 +56,7 @@ pipeline {
                     echo "Jenkins workspace: $WORKSPACE"
                     echo "Build number: $BUILD_NUMBER"
                     echo "Job name: $JOB_NAME"
+                    echo "GitHub repository: ${GITHUB_REPO}"
                 '''
             }
         }
@@ -68,7 +70,7 @@ pipeline {
                             docker pull ${DOCKER_IMAGE}
                             
                             # Run container
-                            docker run -d --name ${CONTAINER_NAME} -p 80:80 ${DOCKER_IMAGE}
+                            docker run -d --name ${CONTAINER_NAME} -p 8082:80 ${DOCKER_IMAGE}
                             
                             # Verify container is running
                             docker ps | grep ${CONTAINER_NAME}
